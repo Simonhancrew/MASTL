@@ -11,7 +11,7 @@
 
 namespace {
 
-constexpr int kMapItem = 1e5;
+constexpr int kMapItem = 1e6;
 
 } // namespace
 
