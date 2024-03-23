@@ -1,9 +1,13 @@
 #include "utils/time_utils.h"
 #include <iostream>
-#include <map>
 #include <string>
 #include <tuple>
 #include <utility>
+#ifndef USE_STD_MAP
+#include <unordered_map>
+#else
+#include <map>
+#endif
 
 namespace {
 
@@ -13,9 +17,15 @@ constexpr int kMapItem = 1e5;
 
 using utils::TickMs;
 
+#ifdef USE_STD_MAP
+using Map = std::map<std::string, bool>;
+#else
+using Map = std::unordered_map<std::string, bool>;
+#endif
+
 int main() {
   std::ios::sync_with_stdio(false);
-  std::map<std::string, bool> mp;
+  Map mp;
 
   std::string main_key = "test-";
   auto st = TickMs();
@@ -26,7 +36,8 @@ int main() {
                std::forward_as_tuple(1));
   }
   auto et = TickMs();
-  std::cout << "insert time: " << et - st << "ms\n";
+  std::cout << "insert " << std::to_string(kMapItem) << " time: " << et - st
+            << "ms\n";
   st = TickMs();
   auto item = mp.find(main_key + "100");
   if (item == mp.end()) {
